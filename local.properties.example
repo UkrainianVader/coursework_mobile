@@ -1,0 +1,7 @@
+# Copy to local.properties and update SDK location
+sdk.dir=C\\:\\Users\\<your-user>\\AppData\\Local\\Android\\Sdk
+
+# Backend API configuration
+# For Android emulator: 10.0.2.2 maps to host machine localhost
+# For physical device: use your actual server IP or domain
+API_BASE_URL=http://10.0.2.2:3000
