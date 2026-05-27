@@ -24,10 +24,12 @@
         android:layout_marginBottom="8dp"
         android:hint="Type">
 
-        <com.google.android.material.textfield.TextInputEditText
+        <com.google.android.material.textfield.MaterialAutoCompleteTextView
             android:id="@+id/componentTypeInput"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content" />
+            android:layout_height="wrap_content"
+            android:inputType="none"
+            android:singleLine="true" />
     </com.google.android.material.textfield.TextInputLayout>
 
     <LinearLayout

@@ -43,6 +43,9 @@ class TableActivity : AppCompatActivity() {
     private var selectedItem: DashboardComponent? = null
     private var pendingSerialInput: TextInputEditText? = null
 
+    private val componentTypes = listOf("контролер", "датчик", "модуль")
+    private val componentStatuses = listOf("вільне", "ремонт")
+
     private val scanLauncher = registerForActivityResult(ScanContract()) { result ->
         val serial = result.contents?.trim().orEmpty()
         if (serial.isNotEmpty()) {
@@ -118,22 +121,23 @@ class TableActivity : AppCompatActivity() {
     private fun showComponentDialog(item: DashboardComponent? = null) {
         val dialogView = layoutInflater.inflate(R.layout.dialog_component_form, null)
         val nameInput = dialogView.findViewById<TextInputEditText>(R.id.componentNameInput)
-        val typeInput = dialogView.findViewById<TextInputEditText>(R.id.componentTypeInput)
+        val typeInput = dialogView.findViewById<com.google.android.material.textfield.MaterialAutoCompleteTextView>(R.id.componentTypeInput)
         val serialInput = dialogView.findViewById<TextInputEditText>(R.id.componentSerialInput)
         val descriptionInput = dialogView.findViewById<TextInputEditText>(R.id.componentDescriptionInput)
         val statusInput = dialogView.findViewById<com.google.android.material.textfield.MaterialAutoCompleteTextView>(R.id.componentStatusInput)
         val scanButton = dialogView.findViewById<MaterialButton>(R.id.scanSerialButton)
 
-        val statuses = listOf("вільне", "ремонт")
-        statusInput.setAdapter(ArrayAdapter(this, android.R.layout.simple_list_item_1, statuses))
+        typeInput.setAdapter(ArrayAdapter(this, android.R.layout.simple_list_item_1, componentTypes))
+        statusInput.setAdapter(ArrayAdapter(this, android.R.layout.simple_list_item_1, componentStatuses))
 
         if (item != null) {
             nameInput.setText(item.name)
-            typeInput.setText(item.type)
+            typeInput.setText(item.type, false)
             serialInput.setText(item.serial)
             descriptionInput.setText(item.description.orEmpty())
             statusInput.setText(item.status, false)
         } else {
+            typeInput.setText(componentTypes.first(), false)
             statusInput.setText("вільне", false)
         }
 
@@ -162,8 +166,18 @@ class TableActivity : AppCompatActivity() {
                     return@setOnClickListener
                 }
 
+                if (!componentTypes.contains(type)) {
+                    toast("Select a valid component type")
+                    return@setOnClickListener
+                }
+
                 if (status == "призначене") {
                     toast("Use Assign to set assigned status")
+                    return@setOnClickListener
+                }
+
+                if (!componentStatuses.contains(status)) {
+                    toast("Select a valid status")
                     return@setOnClickListener
                 }
 
