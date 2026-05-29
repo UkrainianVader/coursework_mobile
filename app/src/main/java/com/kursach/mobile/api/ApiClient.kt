@@ -80,7 +80,12 @@ object ApiClient {
 
     private fun normalizeBaseUrl(value: String): String {
         val trimmed = value.trim().ifEmpty { DEFAULT_BASE_URL }
-        val withTrailingSlash = if (trimmed.endsWith("/")) trimmed else "$trimmed/"
+        val withScheme = when {
+            trimmed.startsWith("http://", ignoreCase = true) -> trimmed
+            trimmed.startsWith("https://", ignoreCase = true) -> trimmed
+            else -> "http://$trimmed"
+        }
+        val withTrailingSlash = if (withScheme.endsWith("/")) withScheme else "$withScheme/"
         return withTrailingSlash.toHttpUrlOrNull()?.toString() ?: DEFAULT_BASE_URL
     }
 }

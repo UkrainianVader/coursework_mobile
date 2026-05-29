@@ -22,14 +22,17 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginBottom="8dp"
-        android:hint="Type">
+        android:hint="Тип"
+        app:endIconMode="dropdown_menu"
+        style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.ExposedDropdownMenu">
 
         <com.google.android.material.textfield.MaterialAutoCompleteTextView
             android:id="@+id/componentTypeInput"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:inputType="none"
-            android:singleLine="true" />
+            android:singleLine="true"
+            android:completionThreshold="0" />
     </com.google.android.material.textfield.TextInputLayout>
 
     <LinearLayout
@@ -43,7 +46,7 @@
             android:layout_height="wrap_content"
             android:layout_marginEnd="8dp"
             android:layout_weight="1"
-            android:hint="Serial">
+            android:hint="Серійний номер">
 
             <com.google.android.material.textfield.TextInputEditText
                 android:id="@+id/componentSerialInput"
@@ -56,14 +59,14 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="bottom"
-            android:text="Scan" />
+                android:text="Сканувати" />
     </LinearLayout>
 
     <com.google.android.material.textfield.TextInputLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginBottom="8dp"
-        android:hint="Description">
+        android:hint="Опис">
 
         <com.google.android.material.textfield.TextInputEditText
             android:id="@+id/componentDescriptionInput"
@@ -75,7 +78,9 @@
     <com.google.android.material.textfield.TextInputLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:hint="Status">
+        android:hint="Статус"
+        app:endIconMode="dropdown_menu"
+        style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.ExposedDropdownMenu">
 
         <com.google.android.material.textfield.MaterialAutoCompleteTextView
             android:id="@+id/componentStatusInput"

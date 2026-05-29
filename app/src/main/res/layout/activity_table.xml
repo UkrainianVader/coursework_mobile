@@ -9,7 +9,7 @@
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Components"
+        android:text="Обладнання"
         android:textSize="24sp"
         android:textStyle="bold" />
 
@@ -19,7 +19,36 @@
         android:layout_height="wrap_content"
         android:layout_marginTop="4dp"
         android:layout_marginBottom="12dp"
-        android:text="Signed in" />
+        android:text="Увійшли в систему" />
+
+    <LinearLayout
+        android:id="@+id/searchRow"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="12dp"
+        android:orientation="horizontal">
+
+        <com.google.android.material.textfield.TextInputLayout
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginEnd="8dp"
+            android:layout_weight="1"
+            android:hint="Пошук обладнання">
+
+            <com.google.android.material.textfield.TextInputEditText
+                android:id="@+id/searchInput"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:singleLine="true" />
+        </com.google.android.material.textfield.TextInputLayout>
+
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/searchScanButton"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="bottom"
+            android:text="Сканер" />
+    </LinearLayout>
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -38,14 +67,14 @@
                 android:layout_height="wrap_content"
                 android:layout_marginEnd="8dp"
                 android:layout_weight="1"
-                android:text="Add" />
+                android:text="Додати" />
 
             <com.google.android.material.button.MaterialButton
                 android:id="@+id/editButton"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
-                android:text="Edit" />
+                android:text="Редагувати" />
         </LinearLayout>
 
         <LinearLayout
@@ -60,14 +89,60 @@
                 android:layout_height="wrap_content"
                 android:layout_marginEnd="8dp"
                 android:layout_weight="1"
-                android:text="Remove" />
+                android:text="Видалити" />
 
             <com.google.android.material.button.MaterialButton
                 android:id="@+id/assignButton"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
-                android:text="Assign" />
+                android:text="Призначити" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/adminButtonsRow"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="8dp"
+            android:orientation="horizontal">
+
+            <com.google.android.material.button.MaterialButton
+                android:id="@+id/addUserButton"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginEnd="8dp"
+                android:layout_weight="1"
+                android:text="Користувач +" />
+
+            <com.google.android.material.button.MaterialButton
+                android:id="@+id/removeUserButton"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:text="Користувач -" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/adminDbRow"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="8dp"
+            android:orientation="horizontal">
+
+            <com.google.android.material.button.MaterialButton
+                android:id="@+id/resetDbButton"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginEnd="8dp"
+                android:layout_weight="1"
+                android:text="Скинути БД" />
+
+            <com.google.android.material.button.MaterialButton
+                android:id="@+id/reportButton"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:text="Звіт" />
         </LinearLayout>
 
         <LinearLayout
@@ -82,14 +157,14 @@
                 android:layout_height="wrap_content"
                 android:layout_marginEnd="8dp"
                 android:layout_weight="1"
-                android:text="Refresh" />
+                android:text="Оновити" />
 
             <com.google.android.material.button.MaterialButton
                 android:id="@+id/logoutButton"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
-                android:text="Logout" />
+                android:text="Вийти" />
         </LinearLayout>
     </LinearLayout>
 
@@ -98,7 +173,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginBottom="8dp"
-        android:text="Loading..."
+        android:text="Завантаження..."
         android:textStyle="bold" />
 
     <androidx.recyclerview.widget.RecyclerView

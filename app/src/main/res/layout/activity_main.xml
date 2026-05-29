@@ -32,29 +32,22 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginBottom="8dp"
-                android:text="API settings"
+                android:text="Налаштування сервера"
                 android:textStyle="bold" />
 
             <com.google.android.material.textfield.TextInputLayout
                 android:id="@+id/apiUrlLayout"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:hint="Backend API URL">
+                android:hint="IP або адреса сервера">
 
                 <com.google.android.material.textfield.TextInputEditText
                     android:id="@+id/apiUrlInput"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:inputType="textUri"
+                    android:inputType="text"
                     android:singleLine="true" />
             </com.google.android.material.textfield.TextInputLayout>
-
-            <com.google.android.material.button.MaterialButton
-                android:id="@+id/saveApiUrlButton"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="12dp"
-                android:text="Save URL" />
         </LinearLayout>
     </com.google.android.material.card.MaterialCardView>
 
@@ -75,14 +68,14 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginBottom="8dp"
-                android:text="Login"
+                android:text="Вхід"
                 android:textStyle="bold" />
 
             <com.google.android.material.textfield.TextInputLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginBottom="8dp"
-                android:hint="Username">
+                android:hint="Логін">
 
                 <com.google.android.material.textfield.TextInputEditText
                     android:id="@+id/loginUserInput"
@@ -94,7 +87,7 @@
             <com.google.android.material.textfield.TextInputLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:hint="Password">
+                android:hint="Пароль">
 
                 <com.google.android.material.textfield.TextInputEditText
                     android:id="@+id/loginPasswordInput"
@@ -109,7 +102,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="12dp"
-                android:text="Login" />
+                android:text="Увійти" />
         </LinearLayout>
     </com.google.android.material.card.MaterialCardView>
 
@@ -118,7 +111,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginBottom="12dp"
-        android:text="Ready"
+        android:text="Готово"
         android:textStyle="bold" />
 
 </LinearLayout>

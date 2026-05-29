@@ -3,6 +3,7 @@ package com.kursach.mobile
 import android.content.Intent
 import android.os.Bundle
 import android.widget.Toast
+import androidx.core.widget.doAfterTextChanged
 import androidx.appcompat.app.AppCompatActivity
 import com.google.android.material.button.MaterialButton
 import com.google.android.material.textfield.TextInputEditText
@@ -11,6 +12,7 @@ import com.kursach.mobile.api.ApiClient
 import com.kursach.mobile.api.ApiService
 import com.kursach.mobile.api.AuthResponse
 import com.kursach.mobile.api.LoginRequest
+import okhttp3.HttpUrl.Companion.toHttpUrlOrNull
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
@@ -35,17 +37,21 @@ class MainActivity : AppCompatActivity() {
         statusText = findViewById(R.id.statusText)
 
         val savedUrl = ApiClient.init(this)
-        apiUrlInput.setText(savedUrl.removeSuffix("/"))
-
-        findViewById<MaterialButton>(R.id.saveApiUrlButton).setOnClickListener {
-            saveApiUrl()
+        apiUrlInput.setText(savedUrl.removePrefix("http://").removePrefix("https://").removeSuffix("/"))
+        apiUrlInput.doAfterTextChanged {
+            persistServerAddress(showError = false)
+        }
+        apiUrlInput.setOnFocusChangeListener { _, hasFocus ->
+            if (!hasFocus) {
+                persistServerAddress(showError = true)
+            }
         }
 
         findViewById<MaterialButton>(R.id.loginButton).setOnClickListener {
             login()
         }
 
-        setStatus("Enter the backend URL and sign in.")
+        setStatus("Введіть IP сервера і увійдіть.")
     }
 
     override fun onStart() {
@@ -58,30 +64,44 @@ class MainActivity : AppCompatActivity() {
             }
 
             override fun onFailure(call: Call<AuthResponse>, t: Throwable) {
-                setStatus(t.message ?: "Ready.")
+                setStatus(t.message ?: "Готово.")
             }
         })
     }
 
-    private fun saveApiUrl() {
+    private fun persistServerAddress(showError: Boolean): Boolean {
         val rawUrl = apiUrlInput.text?.toString()?.trim().orEmpty()
         if (rawUrl.isBlank()) {
-            apiUrlLayout.error = "Enter an API URL."
-            return
+            if (showError) {
+                apiUrlLayout.error = "Введіть IP або адресу сервера."
+            }
+            return false
+        }
+
+        val normalizedUrl = normalizeServerAddress(rawUrl)
+        if (normalizedUrl == null) {
+            if (showError) {
+                apiUrlLayout.error = "Невірна адреса сервера."
+            }
+            return false
         }
 
         apiUrlLayout.error = null
-        val normalizedUrl = if (rawUrl.endsWith("/")) rawUrl else "$rawUrl/"
         ApiClient.init(this, normalizedUrl)
-        setStatus("API URL saved: ${normalizedUrl.removeSuffix("/")}")
+        setStatus("Сервер: ${normalizedUrl.removePrefix("http://").removePrefix("https://").removeSuffix("/")}")
+        return true
     }
 
     private fun login() {
+        if (!persistServerAddress(showError = true)) {
+            return
+        }
+
         val username = usernameInput.text?.toString()?.trim().orEmpty()
         val password = passwordInput.text?.toString().orEmpty()
 
         if (username.isBlank() || password.isBlank()) {
-            setStatus("Enter username and password.")
+            setStatus("Введіть логін і пароль.")
             return
         }
 
@@ -91,12 +111,12 @@ class MainActivity : AppCompatActivity() {
                     if (response.isSuccessful && response.body() != null) {
                         openTable(response.body()!!.user.username)
                     } else {
-                        setStatus("Login failed (${response.code()}).")
+                        setStatus("Помилка входу (${response.code()}).")
                     }
                 }
 
                 override fun onFailure(call: Call<AuthResponse>, t: Throwable) {
-                    setStatus(t.message ?: "Login request failed.")
+                    setStatus(t.message ?: "Не вдалося виконати вхід.")
                 }
             })
     }
@@ -111,5 +131,16 @@ class MainActivity : AppCompatActivity() {
 
     private fun setStatus(message: String) {
         statusText.text = message
+    }
+
+    private fun normalizeServerAddress(rawValue: String): String? {
+        val trimmed = rawValue.trim().ifEmpty { return null }
+        val withScheme = when {
+            trimmed.startsWith("http://", ignoreCase = true) -> trimmed
+            trimmed.startsWith("https://", ignoreCase = true) -> trimmed
+            else -> "http://$trimmed"
+        }
+        val withTrailingSlash = if (withScheme.endsWith("/")) withScheme else "$withScheme/"
+        return withTrailingSlash.toHttpUrlOrNull()?.toString()
     }
 }

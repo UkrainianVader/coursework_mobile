@@ -41,6 +41,15 @@ interface ApiService {
 
     @POST("api/assignments/return-broken")
     fun returnBrokenComponent(@Body request: ComponentIdRequest): Call<MessageResponse>
+
+    @POST("api/users/add")
+    fun addUser(@Body request: CreateUserRequest): Call<MessageResponse>
+
+    @POST("api/users/delete")
+    fun deleteUser(@Body request: DeleteUserRequest): Call<MessageResponse>
+
+    @POST("api/db/reset")
+    fun resetDatabase(): Call<MessageResponse>
 }
 
 data class LoginRequest(
@@ -112,4 +121,14 @@ data class ComponentIdRequest(
 data class AssignComponentRequest(
     val id: Long,
     val userId: Long
+)
+
+data class CreateUserRequest(
+    val username: String,
+    val password: String,
+    val role: String
+)
+
+data class DeleteUserRequest(
+    val id: Long
 )

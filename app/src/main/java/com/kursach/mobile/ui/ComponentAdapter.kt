@@ -9,17 +9,21 @@ import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import com.google.android.material.card.MaterialCardView
+import com.google.android.material.button.MaterialButton
 import com.kursach.mobile.R
 import com.kursach.mobile.api.DashboardComponent
 
 class ComponentAdapter(
-    private val onItemClick: (DashboardComponent) -> Unit
+    private val onItemClick: (DashboardComponent) -> Unit,
+    private val onReturnClick: (DashboardComponent, Boolean) -> Unit
 ) : ListAdapter<DashboardComponent, ComponentAdapter.ComponentViewHolder>(DiffCallback) {
     private var assignmentByEquipmentId: Map<String, String?> = emptyMap()
     private var selectedId: Long? = null
+    private var showReturnActions: Boolean = false
 
-    fun submitList(items: List<DashboardComponent>, assignmentMap: Map<String, String?>) {
+    fun submitList(items: List<DashboardComponent>, assignmentMap: Map<String, String?>, showReturnActions: Boolean) {
         assignmentByEquipmentId = assignmentMap
+        this.showReturnActions = showReturnActions
         super.submitList(items)
     }
 
@@ -30,24 +34,28 @@ class ComponentAdapter(
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ComponentViewHolder {
         val view = LayoutInflater.from(parent.context).inflate(R.layout.item_component_row, parent, false)
-        return ComponentViewHolder(view, onItemClick)
+        return ComponentViewHolder(view, onItemClick, onReturnClick)
     }
 
     override fun onBindViewHolder(holder: ComponentViewHolder, position: Int) {
-        holder.bind(getItem(position), assignmentByEquipmentId, getItem(position).id == selectedId)
+        holder.bind(getItem(position), assignmentByEquipmentId, getItem(position).id == selectedId, showReturnActions)
     }
 
     class ComponentViewHolder(
         itemView: View,
-        private val onItemClick: (DashboardComponent) -> Unit
+        private val onItemClick: (DashboardComponent) -> Unit,
+        private val onReturnClick: (DashboardComponent, Boolean) -> Unit
     ) : RecyclerView.ViewHolder(itemView) {
         private val card = itemView.findViewById<MaterialCardView>(R.id.componentCard)
         private val name = itemView.findViewById<TextView>(R.id.componentName)
         private val details = itemView.findViewById<TextView>(R.id.componentDetails)
         private val status = itemView.findViewById<TextView>(R.id.componentStatus)
         private val assignee = itemView.findViewById<TextView>(R.id.componentAssignee)
+        private val userActionRow = itemView.findViewById<View>(R.id.userActionRow)
+        private val returnButton = itemView.findViewById<MaterialButton>(R.id.returnButton)
+        private val returnBrokenButton = itemView.findViewById<MaterialButton>(R.id.returnBrokenButton)
 
-        fun bind(item: DashboardComponent, assignmentMap: Map<String, String?>, selected: Boolean) {
+        fun bind(item: DashboardComponent, assignmentMap: Map<String, String?>, selected: Boolean, showReturnActions: Boolean) {
             name.text = item.name
             details.text = itemView.context.getString(
                 R.string.component_details_format,
@@ -60,6 +68,14 @@ class ComponentAdapter(
                 R.string.component_assignee_format,
                 assignmentMap[item.id.toString()] ?: "Unassigned"
             )
+
+            userActionRow.visibility = if (showReturnActions) View.VISIBLE else View.GONE
+            returnButton.setOnClickListener {
+                onReturnClick(item, false)
+            }
+            returnBrokenButton.setOnClickListener {
+                onReturnClick(item, true)
+            }
 
             card.strokeWidth = if (selected) 4 else 1
             card.strokeColor = ContextCompat.getColor(
